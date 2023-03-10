@@ -1,6 +1,5 @@
-# Use the official Python image as a parent image
-FROM python:3.9-slim-buster
-
+# Use the Python image form ECR as a parent image
+FROM public.ecr.aws/docker/library/python:3.9-slim-buster
 # Set the working directory to /app
 WORKDIR /app
 

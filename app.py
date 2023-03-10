@@ -1,15 +1,20 @@
-from flask import Flask, jsonify, request
+import uvicorn
 from transformers import pipeline
+from fastapi import FastAPI, Query
 
-app = Flask(__name__)
-sentiment_pipeline = pipeline("sentiment-analysis")
+app = FastAPI()
+@app.get("/SentimentAnalyzer")
+async def SentimentAnalyzer(q: str = Query(None, max_length = 1000)):
+    try:
+        sentiment_pipeline = pipeline("sentiment-analysis")
+        result = sentiment_pipeline(q)
+        SentimentType = result[0]['label']
+        SentimentValue = result[0]['score']
+        return {"SentimentType": SentimentType, "SentimentValue": SentimentValue}
+    except Exception as e:
+        return {"Error": str(e), "SentimentType": None, "SentimentValue": 0.0}
 
-@app.route('/analyze', methods=['POST'])
-def analyze():
-    data = request.get_json()
-    result = sentiment_pipeline(data['text'])
-    return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    uvicorn.run(app ,host="0.0.0.0",port=9005)
 
