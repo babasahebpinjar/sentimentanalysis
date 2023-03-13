@@ -1,7 +1,5 @@
 import requests
 
-
-# New version
 url = 'http://localhost:5000/analyze'
 data = {'text': 'This is a wat I love to do.'}
 
